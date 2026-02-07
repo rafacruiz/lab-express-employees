@@ -1,6 +1,6 @@
 import express from "express";
 
-import data from './data.json' with { type: 'json' };
+import employees from './data.json' with { type: 'json' };
 
 const app = express();
 
@@ -13,10 +13,17 @@ app.get('/api/employees', (req, res) => {
         const start = (2 * (page - 1));
         const end = start + 2;
 
-        res.status(200).json(data.slice(start, end));
+        res.status(200).json(employees.slice(start, end));
     } else {
-        res.status(200).json(data);
+        res.status(200).json(employees);
     }
+});
+
+app.get('/api/employees/oldest', (req, res) => {
+
+    const oldest = employees.toSorted((a, b) => b.age - a.age)[0];
+
+    res.status(200).json(oldest);
 });
 
 
