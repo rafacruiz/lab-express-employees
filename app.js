@@ -52,12 +52,13 @@ app.get('/api/employees', (req, res) => {
         res.status(200).json(employees.slice(start, end));
     } else if (user) {
 
-        const employeesPrivileges = employees.
-            filter((employee) => employee.privileges.includes('user'));
+        const employeesPrivileges = employees
+            .filter((employee) => employee.privileges.includes('user'));
 
         res.status(200).json(employeesPrivileges);
     } else if (badges) {
-        const employeeBadges = employees.filter(employee => employee.badges.includes(badges));
+        const employeeBadges = employees
+            .filter(employee => employee.badges.includes(badges));
 
         res.status(200).json(employeeBadges);
     } else {
@@ -79,6 +80,7 @@ app.post('/api/employees', (req, res) => {
 
     if (!isValid) {
         res.status(400).json({ 
+            code: "bad_request",
             message: 'Error validations data', 
             errors
         });
@@ -109,6 +111,19 @@ app.post('/api/employees', (req, res) => {
     employees.push(employee);
 
     res.status(201).json(employee);
+});
+
+app.get('/api/employees/:name', (req, res) => {
+    const { name } = req.params;
+
+    const employee = employees.find(employee => employee.name.toLowerCase() === name.toLowerCase());
+
+    if (!employee) {
+        res.status(404).json({ code: "not_found" });
+        return;
+    }
+
+    res.status(200).json(employee);
 });
 
 
