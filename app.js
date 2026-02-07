@@ -44,7 +44,7 @@ function validateEmployee(employee) {
 }
 
 app.get('/api/employees', (req, res) => {
-    const { page, user } = req?.query;
+    const { page, user, badges } = req?.query;
     if (page) {
         const start = (2 * (page - 1));
         const end = start + 2;
@@ -56,6 +56,10 @@ app.get('/api/employees', (req, res) => {
             filter((employee) => employee.privileges.includes('user'));
 
         res.status(200).json(employeesPrivileges);
+    } else if (badges) {
+        const employeeBadges = employees.filter(employee => employee.badges.includes(badges));
+
+        res.status(200).json(employeeBadges);
     } else {
         res.status(200).json(employees);
     }
