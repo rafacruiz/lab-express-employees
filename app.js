@@ -7,13 +7,18 @@ const app = express();
 app.use(express.json());
 
 app.get('/api/employees', (req, res) => {
-    const page = req.query?.page
-
+    const { page, user } = req?.query;
     if (page) {
         const start = (2 * (page - 1));
         const end = start + 2;
 
         res.status(200).json(employees.slice(start, end));
+    } else if (user) {
+
+        const employeesPrivileges = employees.
+            filter((employee) => employee.privileges.includes('user'));
+
+        res.status(200).json(employeesPrivileges);
     } else {
         res.status(200).json(employees);
     }
